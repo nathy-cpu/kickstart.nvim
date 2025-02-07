@@ -729,6 +729,15 @@ require('lazy').setup({
     },
   },
 
+  {
+    "A7lavinraj/assistant.nvim",
+    dependencies = { "stevearc/dressing.nvim" }, -- optional but recommended
+    keys = {
+        { "<leader>a", "<cmd>AssistantToggle<cr>", desc = "Toggle Assistant.nvim window" }
+    },
+    opts = {}
+  },
+
   { -- Autocompletion
     'hrsh7th/nvim-cmp',
     event = 'InsertEnter',
@@ -854,47 +863,6 @@ require('lazy').setup({
     'stevearc/dressing.nvim',
     opts = {},
   },
-  { -- Codeforces Assistance
-    'A7lavinraj/assistant.nvim',
-    dependencies = { 'stevearc/dressing.nvim' }, -- optional but recommended
-    keys = {
-      { '<leader>a', '<cmd>AssistantToggle<cr>', desc = 'Toggle Assistant.nvim window' },
-    },
-    opts = {
-      commands = {
-        python = {
-          extension = 'py',
-          compile = nil,
-          execute = {
-            main = 'python3',
-            args = { '$FILENAME_WITH_EXTENSION' },
-          },
-        },
-        cpp = {
-          extension = 'cpp',
-          compile = {
-            main = 'g++',
-            args = { '$FILENAME_WITH_EXTENSION', '-o', '$FILENAME_WITHOUT_EXTENSION' },
-          },
-          execute = {
-            main = './$FILENAME_WITHOUT_EXTENSION',
-            args = nil,
-          },
-        },
-      },
-      ui = {
-        icons = {
-          success = '',
-          failure = '',
-          unknown = '',
-          loading = { '󰸴', '󰸵', '󰸸', '󰸷', '󰸶' },
-        },
-      },
-      core = {
-        process_budget = 5000,
-      },
-    },
-  },
   { -- You can easily change to a different colorscheme.
     -- Change the name of the colorscheme plugin below, and then
     -- change the command in the config to whatever the name of that colorscheme is.
@@ -958,6 +926,7 @@ require('lazy').setup({
       --  Check out: https://github.com/echasnovski/mini.nvim
     end,
   },
+  
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
@@ -1018,7 +987,9 @@ require('lazy').setup({
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
   --    For additional information, see `:help lazy.nvim-lazy.nvim-structuring-your-plugins`
   -- { import = 'custom.plugins' },
-}, {
+  }, 
+  
+  {
   ui = {
     -- If you are using a Nerd Font: set icons to an empty table which will use the
     -- default lazy.nvim defined Nerd Font icons, otherwise define a unicode icons table
