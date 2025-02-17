@@ -611,6 +611,14 @@ require('lazy').setup({
     end,
   },
 
+  { -- Indentation guides
+    "lukas-reineke/indent-blankline.nvim",
+    main = "ibl",
+    ---@module "ibl"
+    ---@type ibl.config
+    opts = {},
+  },
+
   { -- UI elements
     'stevearc/dressing.nvim',
     opts = {},
