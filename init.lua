@@ -452,12 +452,6 @@ require("lazy").setup({
 			local capabilities = require("blink.cmp").get_lsp_capabilities()
 
 			local servers = {
-				clangd = {
-					cmd = {
-						"clangd",
-						"--fallback-style=Webkit",
-					},
-				},
 				lua_ls = {
 					-- cmd = {...},
 					-- filetypes = { ...},
@@ -505,6 +499,40 @@ require("lazy").setup({
 						server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
 						require("lspconfig")[server_name].setup(server)
 					end,
+				},
+			})
+			vim.lsp.enable("clangd")
+			vim.lsp.enable("pylsp")
+			vim.lsp.enable("gopls")
+			vim.lsp.config("gopls", {
+				settings = {
+					gopls = {
+						gofumpt = true,
+					},
+				},
+			})
+			vim.lsp.enable("rust-analyzer")
+			vim.lsp.config("rust-analyzer", {
+				on_attach = function(client, bufnr)
+					vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+				end,
+				settings = {
+					["rust-analyzer"] = {
+						imports = {
+							granularity = {
+								group = "module",
+							},
+							prefix = "self",
+						},
+						cargo = {
+							buildScripts = {
+								enable = true,
+							},
+						},
+						procMacro = {
+							enable = true,
+						},
+					},
 				},
 			})
 		end,
@@ -622,7 +650,7 @@ require("lazy").setup({
 				-- <c-k>: Toggle signature help
 				--
 				-- See :h blink-cmp-config-keymap for defining your own keymap
-				preset = "default",
+				preset = "enter",
 
 				-- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
 				--    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
