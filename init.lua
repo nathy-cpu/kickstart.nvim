@@ -501,40 +501,6 @@ require("lazy").setup({
 					end,
 				},
 			})
-			vim.lsp.enable("clangd")
-			vim.lsp.enable("pylsp")
-			vim.lsp.enable("gopls")
-			vim.lsp.config("gopls", {
-				settings = {
-					gopls = {
-						gofumpt = true,
-					},
-				},
-			})
-			vim.lsp.enable("rust-analyzer")
-			vim.lsp.config("rust-analyzer", {
-				on_attach = function(client, bufnr)
-					vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
-				end,
-				settings = {
-					["rust-analyzer"] = {
-						imports = {
-							granularity = {
-								group = "module",
-							},
-							prefix = "self",
-						},
-						cargo = {
-							buildScripts = {
-								enable = true,
-							},
-						},
-						procMacro = {
-							enable = true,
-						},
-					},
-				},
-			})
 		end,
 	},
 
@@ -725,12 +691,13 @@ require("lazy").setup({
 					comments = { italic = false }, -- Disable italics in comments
 				},
 			})
-
-			-- Load the colorscheme here.
-			-- Like many other themes, this one has different styles, and you could load
-			-- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-			vim.cmd.colorscheme("tokyonight-night")
 		end,
+	},
+
+	{ -- Catppuccin Soothing pastel theme
+		"catppuccin/nvim",
+		name = "catppuccin",
+		priority = 1000,
 	},
 
 	{ -- Highlight todo, notes, etc in comments
@@ -826,6 +793,47 @@ require("lazy").setup({
 		},
 	},
 })
+
+vim.lsp.enable("clangd")
+vim.lsp.enable("pylsp")
+
+vim.lsp.enable("gopls")
+vim.lsp.config("gopls", {
+	settings = {
+		gopls = {
+			gofumpt = true,
+		},
+	},
+})
+
+require("lspconfig").rust_analyzer.setup({
+	on_attach = function(client, bufnr)
+		vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+	end,
+	settings = {
+		["rust-analyzer"] = {
+			imports = {
+				granularity = {
+					group = "module",
+				},
+				prefix = "self",
+			},
+			cargo = {
+				buildScripts = {
+					enable = true,
+				},
+			},
+			procMacro = {
+				enable = true,
+			},
+		},
+	},
+})
+
+-- Load the colorscheme here.
+-- Like many other themes, this one has different styles, and you could load
+-- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
+vim.cmd.colorscheme("catppuccin-mocha")
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
