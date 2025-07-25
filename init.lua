@@ -1,9 +1,12 @@
+-- Set jk as Esc
+vim.keymap.set({ "i", "v", "n", "c", "t" }, "jk", "<Esc>", nil)
+
 -- Set <space> as the leader key
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
 -- I hope nothing bad happens with this
--- vim.hl.priorities.semantic_tokens = 99
+vim.hl.priorities.semantic_tokens = 99
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
@@ -15,6 +18,7 @@ vim.o.smartindent = true
 
 -- Make line numbers default
 vim.o.number = true
+vim.o.relativenumber = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.o.mouse = "a"
