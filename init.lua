@@ -138,6 +138,42 @@ require("lazy").setup({
 		},
 	},
 
+	{ -- Side-by-side diff views for Git review workflows
+		"sindrets/diffview.nvim",
+		cmd = { "DiffviewOpen", "DiffviewFileHistory" },
+	},
+
+	{ -- Git status, staging, commits, and push/pull UI
+		"NeogitOrg/neogit",
+		cmd = "Neogit",
+		keys = {
+			{
+				"<leader>gg",
+				function()
+					require("neogit").open({ kind = "split" })
+				end,
+				desc = "Open Git UI",
+			},
+			{ "<leader>gc", "<cmd>Neogit commit<cr>", desc = "Commit popup" },
+		},
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+			"sindrets/diffview.nvim",
+			"nvim-telescope/telescope.nvim",
+		},
+		opts = {
+			kind = "split",
+			commit_editor = {
+				kind = "auto",
+				staged_diff_split_kind = "auto",
+			},
+			integrations = {
+				telescope = true,
+				diffview = true,
+			},
+		},
+	},
+
 	{ -- Useful plugin to show you pending keybinds.
 		"folke/which-key.nvim",
 		event = "VimEnter", -- Sets the loading event to 'VimEnter'
@@ -182,6 +218,8 @@ require("lazy").setup({
 
 			-- Document existing key chains
 			spec = {
+				{ "<leader>a", group = "[A]I" },
+				{ "<leader>g", group = "[G]it" },
 				{ "<leader>s", group = "[S]earch" },
 				{ "<leader>t", group = "[T]oggle" },
 				{ "<leader>h", group = "Git [H]unk", mode = { "n", "v" } },
@@ -681,21 +719,64 @@ require("lazy").setup({
 		opts = {},
 	},
 
-	{ -- You can easily change to a different colorscheme.
-		-- Change the name of the colorscheme plugin below, and then
-		-- change the command in the config to whatever the name of that colorscheme is.
-		--
-		-- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-		"folke/tokyonight.nvim",
-		priority = 1000, -- Make sure to load this before all the other start plugins.
-		config = function()
-			---@diagnostic disable-next-line: missing-fields
-			require("tokyonight").setup({
-				styles = {
-					comments = { italic = false }, -- Disable italics in comments
-				},
-			})
+	{ -- OpenCode TUI with diff-based edit approval inside Neovim
+		"nickjvandyke/opencode.nvim",
+		version = "*",
+		init = function()
+			vim.g.opencode_opts = {}
+			vim.o.autoread = true
 		end,
+		keys = {
+			{
+				"<leader>aa",
+				function()
+					require("opencode").ask("@this: ", { submit = true })
+				end,
+				mode = { "n", "x" },
+				desc = "Ask OpenCode",
+			},
+			{
+				"<leader>as",
+				function()
+					require("opencode").select()
+				end,
+				desc = "OpenCode actions",
+			},
+			{
+				"<leader>at",
+				function()
+					require("opencode").toggle()
+				end,
+				mode = { "n", "t" },
+				desc = "Toggle OpenCode",
+			},
+			{
+				"<leader>an",
+				function()
+					require("opencode").command("session.new")
+				end,
+				desc = "New OpenCode session",
+			},
+			{
+				"<leader>ah",
+				function()
+					require("opencode").select_session()
+				end,
+				desc = "Select OpenCode session",
+			},
+			{
+				"<leader>ai",
+				function()
+					require("opencode").command("session.interrupt")
+				end,
+				desc = "Interrupt OpenCode",
+			},
+		},
+	},
+
+	{ -- AI baby
+		"github/copilot.vim",
+		name = "GithubCopilot",
 	},
 
 	{ -- Catppuccin Soothing pastel theme
@@ -763,6 +844,7 @@ require("lazy").setup({
 				"query",
 				"vim",
 				"vimdoc",
+				"yaml",
 			},
 			-- Autoinstall languages that are not installed
 			auto_install = true,
@@ -810,7 +892,8 @@ vim.lsp.config("gopls", {
 	},
 })
 
-require("lspconfig").rust_analyzer.setup({
+vim.lsp.enable("rust_analyzer")
+vim.lsp.config("rust_analyzer", {
 	on_attach = function(client, bufnr)
 		vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
 	end,
@@ -833,6 +916,30 @@ require("lspconfig").rust_analyzer.setup({
 		},
 	},
 })
+
+-- require("lspconfig").rust_analyzer.setup({
+-- 	on_attach = function(client, bufnr)
+-- 		vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+-- 	end,
+-- 	settings = {
+-- 		["rust-analyzer"] = {
+-- 			imports = {
+-- 				granularity = {
+-- 					group = "module",
+-- 				},
+-- 				prefix = "self",
+-- 			},
+-- 			cargo = {
+-- 				buildScripts = {
+-- 					enable = true,
+-- 				},
+-- 			},
+-- 			procMacro = {
+-- 				enable = true,
+-- 			},
+-- 		},
+-- 	},
+-- })
 
 -- Load the colorscheme here.
 -- Like many other themes, this one has different styles, and you could load
